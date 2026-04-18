@@ -1,10 +1,9 @@
 import './style.css';
-import { houseDistribution, elementDistribution, yogaData, dashaData, stelliumAnalysis, sadeSatiData } from './data.js';
-import { createHouseChart, createElementChart, createYogaPowerChart, createDashaChart, createStelliumChart, createSadeSatiChart } from './charts.js';
-import { buildNav, buildHero, buildBirthData, buildAvakhada, buildAscendant, buildPlanets, buildStellium, buildYogas, buildNakshatras, buildKP } from './sections.js';
-import { buildDasha, buildAshtakavarga, buildSadeSati, buildDoshas, buildRemedies, buildSynthesis, buildFooter } from './sections2.js';
+import { personalityTraits, lifeAreas, careerAptitude, elementDistribution, yogaData, dashaData, stelliumAnalysis, houseDistribution, healthData, financialProjection, relationshipProfile } from './data.js';
+import { createPersonalityChart, createLifeAreaRadar, createCareerChart, createElementChart, createYogaChart, createDashaChart, createHouseChart, createStelliumChart, createHealthChart, createFinancialChart, createRelationshipChart } from './charts.js';
+import { buildNav, buildHero, buildPersonality, buildSuperpowers, buildLifeAreas, buildCareer, buildRelationships, buildStellium, buildYogas, buildNakshatras, buildAvakhada, buildPlanets } from './sections.js';
+import { buildHealth, buildFinancial, buildTimeline, buildDoshas, buildRemedies, buildSynthesis, buildFooter } from './sections2.js';
 
-// ===== RENDER APP =====
 const app = document.getElementById('app');
 app.innerHTML = `
   <div class="bg-stars"></div>
@@ -13,104 +12,109 @@ app.innerHTML = `
   <div class="nebula-orb n3"></div>
   ${buildNav()}
   ${buildHero()}
-  ${buildBirthData()}
-  ${buildAvakhada()}
-  ${buildAscendant()}
-  ${buildPlanets()}
+  ${buildPersonality()}
+  ${buildSuperpowers()}
+  ${buildLifeAreas()}
+  ${buildCareer()}
+  ${buildRelationships()}
   ${buildStellium()}
   ${buildYogas()}
   ${buildNakshatras()}
-  ${buildKP()}
-  ${buildDasha()}
-  ${buildAshtakavarga()}
-  ${buildSadeSati()}
+  ${buildAvakhada()}
+  ${buildHealth()}
+  ${buildFinancial()}
+  ${buildPlanets()}
+  ${buildTimeline()}
   ${buildDoshas()}
   ${buildRemedies()}
   ${buildSynthesis()}
   ${buildFooter()}
 `;
 
-// ===== INITIALIZE CHARTS =====
+// ===== CHARTS INIT =====
 requestAnimationFrame(() => {
   setTimeout(() => {
-    createHouseChart('houseChart', houseDistribution);
+    createPersonalityChart('personalityChart', personalityTraits);
+    createLifeAreaRadar('lifeAreaChart', lifeAreas);
+    createCareerChart('careerChart', careerAptitude);
     createElementChart('elementChart', elementDistribution);
-    createYogaPowerChart('yogaChart', yogaData);
+    createYogaChart('yogaChart', yogaData);
     createDashaChart('dashaChart', dashaData);
+    createHouseChart('houseChart', houseDistribution);
     createStelliumChart('stelliumChart', stelliumAnalysis);
-    createSadeSatiChart('sadeSatiChart', sadeSatiData);
+    createHealthChart('healthChart', healthData);
+    createFinancialChart('financialChart', financialProjection);
+    createRelationshipChart('relationshipChart', relationshipProfile);
   }, 300);
 });
 
 // ===== SCROLL REVEAL =====
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    }
-  });
-}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
 
-document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
-
-// ===== ANIMATE METER FILLS ON SCROLL =====
-const meterObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const fills = entry.target.querySelectorAll('.meter-fill');
-      fills.forEach(fill => {
-        const w = fill.style.width;
-        fill.style.width = '0%';
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => { fill.style.width = w; });
-        });
+// ===== METER ANIMATIONS =====
+const meterObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.meter-fill').forEach(f => {
+        const w = f.style.width; f.style.width = '0%';
+        requestAnimationFrame(() => requestAnimationFrame(() => { f.style.width = w; }));
       });
-      meterObserver.unobserve(entry.target);
+      meterObs.unobserve(e.target);
     }
   });
-}, { threshold: 0.2 });
-
+}, { threshold: 0.15 });
 document.querySelectorAll('.info-card, .yoga-card, .glass-card').forEach(el => {
-  if (el.querySelector('.meter-fill')) meterObserver.observe(el);
+  if (el.querySelector('.meter-fill')) meterObs.observe(el);
 });
 
-// ===== NAV ACTIVE STATE =====
+// ===== NAV ACTIVE =====
 const sections = document.querySelectorAll('.section, .hero-section');
 const navLinks = document.querySelectorAll('.nav-links a');
-
-const navObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const id = entry.target.id;
-      navLinks.forEach(link => {
-        link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
-      });
+const navObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === `#${e.target.id}`));
     }
   });
-}, { threshold: 0.15, rootMargin: '-80px 0px -60% 0px' });
+}, { threshold: 0.12, rootMargin: '-80px 0px -60% 0px' });
+sections.forEach(s => navObs.observe(s));
 
-sections.forEach(s => navObserver.observe(s));
+// ===== MOBILE MENU CLOSE =====
+navLinks.forEach(l => l.addEventListener('click', () => document.querySelector('.nav-links').classList.remove('open')));
 
-// ===== NAV LINK CLICK — CLOSE MOBILE MENU =====
-navLinks.forEach(link => {
-  link.addEventListener('click', () => {
-    document.querySelector('.nav-links').classList.remove('open');
-  });
-});
-
-// ===== PARALLAX NEBULA ORBS =====
+// ===== PARALLAX =====
 let ticking = false;
 window.addEventListener('scroll', () => {
   if (!ticking) {
     requestAnimationFrame(() => {
       const y = window.scrollY;
-      const orbs = document.querySelectorAll('.nebula-orb');
-      orbs.forEach((orb, i) => {
-        const speed = 0.03 + i * 0.015;
-        orb.style.transform = `translateY(${y * speed}px)`;
+      document.querySelectorAll('.nebula-orb').forEach((orb, i) => {
+        orb.style.transform = `translateY(${y * (0.03 + i * 0.015)}px)`;
       });
       ticking = false;
     });
     ticking = true;
   }
+});
+
+// ===== COUNTER ANIMATION =====
+document.querySelectorAll('.hero-stat .val').forEach(el => {
+  const target = parseInt(el.textContent);
+  el.textContent = '0';
+  const obs = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      let current = 0;
+      const step = Math.ceil(target / 30);
+      const timer = setInterval(() => {
+        current += step;
+        if (current >= target) { current = target; clearInterval(timer); }
+        el.textContent = current;
+      }, 40);
+      obs.unobserve(el);
+    }
+  }, { threshold: 0.5 });
+  obs.observe(el);
 });

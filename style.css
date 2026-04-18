@@ -317,6 +317,46 @@ h1.hero-title .line2 { display: block; background: var(--gradient-accent); -webk
 .remedy-card .protocol h4 { font-size: 0.8rem; color: var(--accent-violet); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
 .remedy-card .protocol p { font-size: 0.82rem; margin-bottom: 0; }
 
+/* ===== CALLOUT BOXES ===== */
+.callout-box {
+  display: flex; gap: 20px; padding: 28px 32px;
+  background: linear-gradient(145deg, rgba(168,130,255,0.08), rgba(110,92,255,0.03));
+  border: 1px solid rgba(168,130,255,0.15); border-radius: var(--radius-lg);
+  border-left: 4px solid var(--accent-violet);
+}
+.callout-box.gold {
+  background: linear-gradient(145deg, rgba(245,200,66,0.08), rgba(255,140,66,0.03));
+  border-color: rgba(245,200,66,0.15); border-left-color: var(--accent-gold);
+}
+.callout-icon { font-size: 2rem; flex-shrink: 0; margin-top: 2px; }
+.callout-content h4 { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; color: var(--text-primary); }
+.callout-content p { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.8; }
+
+/* ===== SUPERPOWER CARDS ===== */
+.superpower-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; }
+.superpower-card {
+  background: var(--bg-card); border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg); padding: 32px; transition: var(--transition-smooth);
+  position: relative; overflow: hidden;
+}
+.superpower-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--gradient-gold); opacity: 0; transition: opacity 0.4s;
+}
+.superpower-card:hover { border-color: rgba(245,200,66,0.3); transform: translateY(-5px); box-shadow: 0 8px 40px rgba(245,200,66,0.08); }
+.superpower-card:hover::before { opacity: 1; }
+.superpower-card .sp-icon { font-size: 2.5rem; display: block; margin-bottom: 16px; }
+.superpower-card h3 { font-family: var(--font-display); font-size: 1.2rem; font-weight: 800; margin-bottom: 12px; background: var(--gradient-gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.superpower-card p { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.8; }
+
+/* ===== SCORE BADGE ===== */
+.score-badge {
+  font-family: var(--font-mono); font-size: 0.8rem; font-weight: 600;
+  padding: 4px 14px; border-radius: 100px;
+  background: rgba(168,130,255,0.1); color: var(--accent-violet);
+  border: 1px solid rgba(168,130,255,0.25); white-space: nowrap;
+}
+
 /* ===== SYNTHESIS ===== */
 .synthesis-box {
   background: linear-gradient(145deg, rgba(168,130,255,0.1), rgba(110,92,255,0.05));
@@ -351,9 +391,14 @@ h1.hero-title .line2 { display: block; background: var(--gradient-accent); -webk
   .chart-row { grid-template-columns: 1fr; }
   .yoga-grid { grid-template-columns: 1fr; }
   .remedy-grid { grid-template-columns: 1fr; }
+  .superpower-grid { grid-template-columns: 1fr; }
   .synthesis-box { padding: 28px; }
   .timeline { padding-left: 32px; }
   .section-header { margin-bottom: 40px; }
+  .callout-box { flex-direction: column; gap: 12px; padding: 20px; }
+  .callout-icon { font-size: 1.5rem; }
+  .chart-container { padding: 20px 14px; }
+  .dosha-status { flex-direction: column; text-align: center; padding: 20px; }
 }
 @media (max-width: 480px) {
   html { font-size: 14px; }

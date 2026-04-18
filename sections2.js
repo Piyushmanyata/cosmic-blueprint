@@ -1,121 +1,112 @@
-import { dashaData, sadeSatiData, remedyData } from './data.js';
+import { dashaData, sadeSatiData, remedyData, healthData, financialProjection, kpPlanetsData, kpCuspsData } from './data.js';
 
-export function buildDasha() {
+export function buildHealth() {
   return `
-  <section class="section" id="dasha">
+  <section class="section" id="health">
     <div class="container">
       <div class="section-header reveal">
-        <span class="section-number">Section 09</span>
-        <h2 class="section-title">Vimshottari Dasha: Chronology of Karma</h2>
-        <p class="section-subtitle">The precise 120-year chronological cycle dictating exactly when planetary potentials, yogas, and karmic debts physically manifest in life.</p>
+        <span class="section-number">11 · Health Blueprint</span>
+        <h2 class="section-title">Physical & Mental Health Map</h2>
+        <p class="section-subtitle">Every chart has specific health tendencies. These aren't predictions of illness — they're areas that need extra attention for peak performance.</p>
         <div class="section-divider"></div>
       </div>
-      <div class="chart-container reveal" style="margin-bottom:32px">
-        <h3>Mahadasha Duration Comparison</h3>
-        <div class="chart-canvas-wrap"><canvas id="dashaChart"></canvas></div>
+      <div class="chart-container reveal" style="height:350px;margin-bottom:28px">
+        <h3>Health Risk Areas (Lower = Better)</h3>
+        <canvas id="healthChart"></canvas>
+      </div>
+      <div class="info-grid reveal">
+        ${healthData.map((h, i) => `
+        <div class="info-card reveal-delay-${(i % 3) + 1}">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+            <h3>${h.area}</h3>
+            <span class="score-badge" style="background:${h.risk > 60 ? 'rgba(255,107,157,0.15)' : h.risk > 40 ? 'rgba(255,140,66,0.15)' : 'rgba(66,232,213,0.15)'};color:${h.risk > 60 ? '#ff6b9d' : h.risk > 40 ? '#ff8c42' : '#42e8d5'};border-color:${h.risk > 60 ? 'rgba(255,107,157,0.3)' : h.risk > 40 ? 'rgba(255,140,66,0.3)' : 'rgba(66,232,213,0.3)'}">${h.risk > 60 ? 'Watch' : h.risk > 40 ? 'Moderate' : 'Strong'}</span>
+          </div>
+          <p>${h.advice}</p>
+          <div class="meter-row" style="margin-top:14px"><div class="meter-track"><div class="meter-fill" style="width:${h.risk}%;background:${h.color}"></div></div><span class="meter-val">${h.risk}%</span></div>
+        </div>`).join('')}
+      </div>
+      <div class="callout-box reveal" style="margin-top:28px">
+        <div class="callout-icon">⚕️</div>
+        <div class="callout-content">
+          <h4>The Bottom Line</h4>
+          <p>Overall physical vitality is <strong>exceptionally strong</strong> — Mars in its own sign gives near-superhuman stamina and recovery ability. The main vulnerabilities are stress-related digestive issues (Scorpio absorbs emotional tension in the gut) and the risk of burnout from the Pitta fire constitution driving relentless ambition. <strong>Prevention strategy:</strong> cooling diet, emotional boundaries, and scheduled rest (not optional, mandatory).</p>
+        </div>
+      </div>
+    </div>
+  </section>`;
+}
+
+export function buildFinancial() {
+  return `
+  <section class="section" id="money">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-number">12 · Wealth Trajectory</span>
+        <h2 class="section-title">Financial Projection Over Lifetime</h2>
+        <p class="section-subtitle">Based on the Dasha (life chapter) system, this is how wealth potential rises and falls across different life periods.</p>
+        <div class="section-divider"></div>
+      </div>
+      <div class="chart-container reveal" style="height:350px;margin-bottom:28px">
+        <h3>Wealth Potential Across Life Chapters</h3>
+        <canvas id="financialChart"></canvas>
+      </div>
+      <div class="callout-box gold reveal">
+        <div class="callout-icon">💰</div>
+        <div class="callout-content">
+          <h4>The Money Story</h4>
+          <p>The current Mercury period (ending 2029) is building the intellectual capital and networks that will generate future wealth. After a brief Ketu spiritual reset (2029-2036), the <strong style="color:var(--accent-gold)">Venus Golden Era (2036-2056)</strong> activates — a full 20 years of maximum wealth accumulation, luxury, and financial dominance. This is when the Lakshmi Yoga fires at full power, mathematically guaranteeing the native becomes a true "Lord of Wealth."</p>
+        </div>
+      </div>
+      <div class="info-grid reveal" style="margin-top:24px">
+        <div class="info-card">
+          <h3>💎 3 Wealth Guarantees</h3>
+          <p><strong>1.</strong> Lakshmi Yoga — named after the Goddess of Wealth, guarantees massive fortune<br><strong>2.</strong> Mercury rules the 11th house of gains — multiple income streams<br><strong>3.</strong> Venus in 2nd house of wealth — deep capacity for luxury accumulation</p>
+        </div>
+        <div class="info-card">
+          <h3>⚠️ Financial Warning</h3>
+          <p>During the current Mercury period, there's a strong tendency toward <strong>extravagance and impulsive spending</strong>. The chart strongly advises: prioritize saving over spending, seek second opinions before major financial decisions, and avoid high-risk speculation until after 2036.</p>
+        </div>
+      </div>
+    </div>
+  </section>`;
+}
+
+export function buildTimeline() {
+  return `
+  <section class="section" id="timeline">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-number">13 · Life Timeline</span>
+        <h2 class="section-title">The 9 Chapters of Life</h2>
+        <p class="section-subtitle">Vedic astrology divides life into chapters called "Dashas" — each ruled by a different planet, bringing completely different themes, challenges, and opportunities.</p>
+        <div class="section-divider"></div>
+      </div>
+      <div class="chart-container reveal" style="height:420px;margin-bottom:28px">
+        <h3>Life Chapter Duration Comparison</h3>
+        <canvas id="dashaChart"></canvas>
       </div>
       <div class="timeline reveal">
         ${dashaData.map(d => `
         <div class="timeline-item ${d.status === 'active' ? 'active' : ''}">
-          <div class="timeline-dot"></div>
+          <div class="timeline-dot" style="${d.status === 'active' ? `background:${d.color};box-shadow:0 0 16px ${d.color}88` : ''}"></div>
           <div class="timeline-dates">${d.start} → ${d.end} (${d.years} years)</div>
           <div class="timeline-title" style="color:${d.color}">
-            ${d.planet} Mahadasha
-            ${d.status === 'active' ? '<span class="tag tag-cyan" style="margin-left:8px;font-size:0.65rem;vertical-align:middle">ACTIVE NOW</span>' : ''}
-            ${d.status === 'completed' ? '<span class="tag tag-violet" style="margin-left:8px;font-size:0.65rem;vertical-align:middle">COMPLETED</span>' : ''}
+            ${d.emoji} ${d.label}
+            ${d.status === 'active' ? '<span class="tag tag-cyan" style="margin-left:8px;font-size:0.65rem;vertical-align:middle">⚡ HAPPENING NOW</span>' : ''}
+            ${d.status === 'completed' ? '<span class="tag tag-violet" style="margin-left:8px;font-size:0.65rem;vertical-align:middle">✓ COMPLETED</span>' : ''}
           </div>
-          <div class="timeline-desc">${d.desc}</div>
+          <div class="timeline-desc">${d.simple}</div>
         </div>`).join('')}
       </div>
-    </div>
-  </section>`;
-}
-
-export function buildAshtakavarga() {
-  return `
-  <section class="section" id="ashtakavarga">
-    <div class="container">
-      <div class="section-header reveal">
-        <span class="section-number">Section 10</span>
-        <h2 class="section-title">Ashtakavarga & Shadbala</h2>
-        <p class="section-subtitle">Advanced mathematical systems quantifying planetary strength and transit potential through eight-fold division and six-fold strength metrics.</p>
-        <div class="section-divider"></div>
-      </div>
-      <div class="info-grid reveal">
-        <div class="info-card">
-          <span class="card-icon">📊</span>
-          <h3>SAV Mechanics</h3>
-          <p>Total score across the zodiac is a constant of <strong style="color:var(--accent-gold)">337 points</strong>. Baseline average is <strong>28 points per house</strong>.</p>
-          <div class="meter-row" style="margin-top:16px"><span class="meter-label">Below 25</span><div class="meter-track"><div class="meter-fill rose" style="width:30%"></div></div><span class="meter-val" style="color:var(--accent-rose)">Weak</span></div>
-          <div class="meter-row"><span class="meter-label">25-28</span><div class="meter-track"><div class="meter-fill gold" style="width:55%"></div></div><span class="meter-val" style="color:var(--accent-gold)">Mixed</span></div>
-          <div class="meter-row"><span class="meter-label">Above 28</span><div class="meter-track"><div class="meter-fill" style="width:85%"></div></div><span class="meter-val" style="color:var(--accent-violet)">Strong</span></div>
-          <div class="meter-row"><span class="meter-label">Above 30</span><div class="meter-track"><div class="meter-fill" style="width:100%;background:linear-gradient(90deg,var(--accent-cyan),var(--accent-violet))"></div></div><span class="meter-val" style="color:var(--accent-cyan)">Power</span></div>
-        </div>
-        <div class="info-card">
-          <span class="card-icon">⚖️</span>
-          <h3>Shadbala (Six-Fold Strength)</h3>
-          <p>Measures inherent planetary capacity through six dimensions:</p>
-          <div class="meter-row" style="margin-top:12px"><span class="meter-label">Positional</span><div class="meter-track"><div class="meter-fill" style="width:92%"></div></div><span class="meter-val">92%</span></div>
-          <div class="meter-row"><span class="meter-label">Temporal</span><div class="meter-track"><div class="meter-fill gold" style="width:78%"></div></div><span class="meter-val">78%</span></div>
-          <div class="meter-row"><span class="meter-label">Directional</span><div class="meter-track"><div class="meter-fill" style="width:95%"></div></div><span class="meter-val">95%</span></div>
-          <div class="meter-row"><span class="meter-label">Motional</span><div class="meter-track"><div class="meter-fill gold" style="width:70%"></div></div><span class="meter-val">70%</span></div>
-          <div class="meter-row"><span class="meter-label">Aspectual</span><div class="meter-track"><div class="meter-fill" style="width:85%"></div></div><span class="meter-val">85%</span></div>
-          <div class="meter-row"><span class="meter-label">Natural</span><div class="meter-track"><div class="meter-fill" style="width:80%"></div></div><span class="meter-val">80%</span></div>
-        </div>
-        <div class="info-card">
-          <span class="card-icon">🎯</span>
-          <h3>Strategic Implications</h3>
-          <p>High SAV points in the 1st house grant an <strong style="color:var(--accent-violet)">unbreakable magnetic personality</strong> and immense vitality. High points in the 11th house (over 30) signify <strong style="color:var(--accent-gold)">absolute fulfillment of desires</strong>, vast financial networking, and resource accumulation.</p>
-          <p style="margin-top:12px">When benefics (Jupiter, Venus) transit high-scoring SAV houses, execute <strong style="color:var(--accent-cyan)">major life decisions, investments, or career shifts</strong>.</p>
-        </div>
-      </div>
-    </div>
-  </section>`;
-}
-
-export function buildSadeSati() {
-  return `
-  <section class="section" id="sadesati">
-    <div class="container">
-      <div class="section-header reveal">
-        <span class="section-number">Section 11</span>
-        <h2 class="section-title">Shani Sade Sati Transit</h2>
-        <p class="section-subtitle">The transformative 7.5-year period when Saturn crosses the 12th, 1st, and 2nd houses from natal Moon (Cancer). Feared yet profoundly transformative.</p>
-        <div class="section-divider"></div>
-      </div>
-      <div class="chart-container reveal" style="margin-bottom:32px">
-        <h3>Sade Sati Phases Timeline</h3>
-        <div class="chart-canvas-wrap"><canvas id="sadeSatiChart"></canvas></div>
-      </div>
-      <div class="data-table-wrapper reveal">
-        <table class="data-table">
-          <thead><tr><th>Phase</th><th>Start</th><th>End</th><th>Transit Sign</th><th>Status</th></tr></thead>
-          <tbody>${sadeSatiData.map(s => `<tr>
-            <td style="font-weight:600">${s.phase}</td><td>${s.start}</td><td>${s.end}</td><td>${s.sign}</td>
-            <td><span class="tag ${s.status === 'completed' ? 'tag-violet' : s.status === 'upcoming' ? 'tag-orange' : 'tag-blue'}">${s.status}</span></td>
-          </tr>`).join('')}</tbody>
-        </table>
-      </div>
-      <div class="info-grid reveal" style="margin-top:32px">
-        <div class="info-card">
-          <span class="card-icon">🌅</span>
-          <h3>Rising Phase (2032-2034)</h3>
-          <p>Saturn in Gemini (12th from Moon). Financial restructuring, potential domestic shifts. <strong style="color:var(--accent-orange)">Rein in unnecessary expenditures. Avoid high-risk ventures.</strong></p>
-        </div>
-        <div class="info-card">
-          <span class="card-icon">⛰️</span>
-          <h3>Peak Phase (2034-2036)</h3>
-          <p>Saturn directly over natal Moon in Cancer. <strong style="color:var(--accent-rose)">Maximum psychological pressure</strong>. Rigorous emotional endurance tests. Spiritual surrender provides immense relief.</p>
-        </div>
-        <div class="info-card">
-          <span class="card-icon">🌄</span>
-          <h3>Setting Phase (2036-2039)</h3>
-          <p>Saturn over natal 10th house placements. <strong style="color:var(--accent-cyan)">Resolution phase</strong> — grueling lessons crystallize into immense professional authority and stabilized wealth.</p>
-        </div>
-        <div class="info-card">
-          <span class="card-icon">🛡️</span>
-          <h3>Silver Paya Mitigation</h3>
-          <p>The Silver Paya ensures that despite intense pressure, the native experiences <strong style="color:var(--accent-gold)">sudden gains in wealth, property, and cosmic protection</strong> against catastrophic losses during this transit.</p>
+      <div class="glass-card reveal" style="margin-top:32px">
+        <h3 style="font-family:var(--font-display);font-size:1.1rem;margin-bottom:12px">🔮 The Sade Sati Challenge (2032-2039)</h3>
+        <p style="font-size:0.9rem;color:var(--text-secondary);line-height:1.8;margin-bottom:16px">Sade Sati is a 7.5-year period of intense testing by Saturn — think of it as life's final exam before graduation. <strong>Rising Phase (2032-2034):</strong> Financial restructuring needed. <strong>Peak Phase (2034-2036):</strong> Maximum emotional pressure but maximum growth. <strong>Resolution (2036-2039):</strong> Everything crystallizes into permanent authority.</p>
+        <div class="dosha-status clear">
+          <span class="status-icon">🛡️</span>
+          <div class="status-text">
+            <h4>Silver Paya Protection Active</h4>
+            <p>The Silver Paya footing ensures that even during this intense period, the native experiences <strong>sudden gains, property acquisition, and cosmic protection</strong> against catastrophic losses. The storm passes, and what remains is stronger than ever.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -127,28 +118,24 @@ export function buildDoshas() {
   <section class="section" id="doshas">
     <div class="container">
       <div class="section-header reveal">
-        <span class="section-number">Section 12</span>
-        <h2 class="section-title">Dosha Analysis</h2>
-        <p class="section-subtitle">Evaluation of specific planetary alignments forming challenging karmic patterns, particularly regarding marriage and life progression.</p>
+        <span class="section-number">14 · Chart Flaws Check</span>
+        <h2 class="section-title">Dosha (Flaw) Analysis</h2>
+        <p class="section-subtitle">Doshas are challenging patterns in a chart. The good news? This chart is clean on both major ones.</p>
         <div class="section-divider"></div>
       </div>
       <div class="dosha-status clear reveal">
         <span class="status-icon">✅</span>
         <div class="status-text">
           <h4>Manglik Dosha — CANCELLED</h4>
-          <p>Mars is in 1st house (typically Manglik), but advanced analysis confirms it is <strong>entirely cancelled</strong> due to Mars's exact proximity to the Sun (combustion). Destructive marital impacts nullified; protective leadership traits preserved.</p>
+          <p>Mars is in the 1st house which normally creates friction in marriage. But here it's <strong>fully neutralized</strong> by the Sun — meaning all the intensity becomes protective leadership, not destructive conflict. <strong>No special marriage matching needed.</strong></p>
         </div>
       </div>
       <div class="dosha-status clear reveal">
         <span class="status-icon">✅</span>
         <div class="status-text">
           <h4>Kalsarpa Dosha — NOT PRESENT</h4>
-          <p>This Kundli is <strong>completely free</strong> from Kalsarpa Dosha. All seven planets are NOT hemmed between Rahu-Ketu axis. The native's efforts will yield proportionate and unobstructed results throughout life.</p>
+          <p>This chart is <strong>completely free</strong> from the restrictive Kalsarpa pattern. Meaning: efforts translate directly into proportional results. No hidden cosmic brakes on progress. Full green signal.</p>
         </div>
-      </div>
-      <div class="glass-card reveal" style="margin-top:24px">
-        <h3 style="font-family:var(--font-display);font-size:1.1rem;margin-bottom:12px">🔎 What This Means</h3>
-        <p style="font-size:0.9rem;color:var(--text-secondary);line-height:1.8">The absence of both major doshas is exceptionally favorable. <strong style="color:var(--accent-cyan)">Manglik Dosha cancellation</strong> means the native can pursue marriage without specialized matching requirements. <strong style="color:var(--accent-cyan)">Freedom from Kalsarpa</strong> ensures no systemic life delays or restrictions — efforts directly translate into proportional results.</p>
       </div>
     </div>
   </section>`;
@@ -159,9 +146,9 @@ export function buildRemedies() {
   <section class="section" id="remedies">
     <div class="container">
       <div class="section-header reveal">
-        <span class="section-number">Section 13</span>
-        <h2 class="section-title">Karmic Remedies & Gemstone Therapeutics</h2>
-        <p class="section-subtitle">Highly specific astrological therapeutics to harmonize intense planetary energies, mitigate malefic afflictions, and amplify the profound Yogas present in the chart.</p>
+        <span class="section-number">15 · Power-Ups</span>
+        <h2 class="section-title">Recommended Cosmic Remedies</h2>
+        <p class="section-subtitle">Think of these as performance enhancers — specific gemstones and sacred beads that amplify the chart's strengths and shield against weaknesses.</p>
         <div class="section-divider"></div>
       </div>
       <div class="remedy-grid">
@@ -169,11 +156,10 @@ export function buildRemedies() {
         <div class="remedy-card reveal reveal-delay-${(i % 4) + 1}">
           <span class="remedy-icon">${r.icon}</span>
           <h3>${r.name}</h3>
-          <div class="remedy-sub">${r.subtitle} · ${r.planet}</div>
-          <p><strong style="color:var(--accent-gold)">Significance:</strong> ${r.significance}</p>
-          <p><strong style="color:var(--accent-cyan)">Benefits:</strong> ${r.benefits}</p>
+          <div class="remedy-sub">${r.subtitle} · Amplifies ${r.planet}</div>
+          <p><strong style="color:var(--accent-cyan)">What it does:</strong> ${r.benefits}</p>
           <div class="protocol">
-            <h4>📋 Wearing Protocol</h4>
+            <h4>📋 How to Use</h4>
             <p>${r.protocol}</p>
           </div>
         </div>`).join('')}
@@ -187,18 +173,18 @@ export function buildSynthesis() {
   <section class="section" id="synthesis">
     <div class="container">
       <div class="section-header reveal">
-        <span class="section-number">Section 14</span>
-        <h2 class="section-title">Comprehensive Synthesis</h2>
-        <p class="section-subtitle">The final, holistic integration of all astrological findings — the cosmic blueprint decoded.</p>
+        <span class="section-number">Final · The Complete Picture</span>
+        <h2 class="section-title">The Full Synthesis</h2>
+        <p class="section-subtitle">Everything combined into one clear conclusion.</p>
         <div class="section-divider"></div>
       </div>
       <div class="synthesis-box reveal">
-        <p>The exhaustively detailed astrological analysis of this Kundli reveals an individual <strong style="color:var(--accent-violet)">mathematically and cosmically engineered</strong> for profound societal impact, unparalleled intellectual dominance, and highly authoritative leadership.</p>
-        <p>The synthesis of the <strong style="color:var(--accent-rose)">Scorpio Ascendant</strong> with the formidable, densely packed <strong>1st-house stellium</strong> (Sun, Mars, Mercury, Jupiter) generates a core personality defined by intense drive, strategic brilliance, and an unbreakable magnetic power.</p>
-        <p>The presence of high-order planetary alignments — <strong style="color:var(--accent-gold)">Ruchaka, Budhaditya, Lakshmi, and Indra Yogas</strong> — guarantees a life trajectory that completely bypasses the ordinary. It is a path explicitly marked by significant wealth accumulation, undisputed professional authority, and enduring societal respect.</p>
-        <p>The highly protective grace of the <strong style="color:var(--accent-cyan)">Cancer Moon in the 9th house</strong>, combined with the <strong style="color:var(--accent-gold)">Silver Paya</strong>, ensures intense ambition is perfectly balanced by profound spiritual wisdom, ethical grounding, and ultimate karmic protection against total ruin.</p>
-        <p>While the 10th house Saturn-Ketu conjunction demands cycles of grueling hard work and ego-detachment, these are merely the required <strong>karmic crucibles for forging lasting, invincible success</strong>.</p>
-        <p style="font-weight:600;color:var(--text-primary);font-size:1.1rem;margin-top:16px">By consciously navigating the Vimshottari Dasha periods and utilizing the prescribed remedies, the native is cosmically positioned to achieve <span style="background:var(--gradient-accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent">absolute self-mastery, limitless material abundance, and a historically enduring legacy</span>.</p>
+        <p>This chart reveals a person <strong style="color:var(--accent-violet)">engineered by the cosmos</strong> for profound societal impact, unparalleled intellectual dominance, and commanding leadership.</p>
+        <p>The 4-planet stellium in the 1st house creates a personality that is <strong style="color:var(--accent-rose)">intense, magnetic, strategic, and virtually unstoppable</strong>. Mars provides the engine, Sun provides the direction, Mercury provides the genius-level brain, and Jupiter provides the wisdom to use it all for good.</p>
+        <p>With <strong style="color:var(--accent-gold)">7 sacred Yogas</strong> — including the Lakshmi Yoga (wealth guarantee), Ruchaka Yoga (warrior king), and Indra Yoga (royal destiny) — this life trajectory completely bypasses the ordinary.</p>
+        <p>The <strong style="color:var(--accent-cyan)">Venus Golden Era (2036-2056)</strong> will be the peak — 20 years of maximum wealth, luxury, and influence. The current Mercury period is building the intellectual foundation for that explosion.</p>
+        <p>The Silver Paya acts as a <strong>lifetime cosmic insurance policy</strong> — ensuring that even during the toughest periods, protection, gains, and resilience are always present.</p>
+        <p style="font-weight:700;color:var(--text-primary);font-size:1.15rem;margin-top:24px;line-height:1.6">The bottom line: this is a chart of <span style="background:var(--gradient-accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent">absolute self-mastery, limitless material abundance, and a historically enduring legacy</span>. The only requirement is patience, discipline, and trust in the process.</p>
       </div>
     </div>
   </section>`;
@@ -207,8 +193,7 @@ export function buildSynthesis() {
 export function buildFooter() {
   return `
   <footer class="footer">
-    <p style="margin-bottom:8px;font-family:var(--font-display);font-size:1rem;font-weight:600;background:var(--gradient-accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Cosmic Blueprint</p>
-    <p>Comprehensive Vedic Astrology Analysis · ${new Date().getFullYear()}</p>
-    <p style="margin-top:8px;font-size:0.7rem">Based on traditional Vedic Astrological calculations, Krishnamurti Paddhati (KP), Ashtakavarga, and Vimshottari Dasha systems.</p>
+    <p style="margin-bottom:8px;font-family:var(--font-display);font-size:1.1rem;font-weight:700;background:var(--gradient-accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Cosmic Blueprint</p>
+    <p>Comprehensive Vedic Astrology Analysis · Decoded in Plain English · ${new Date().getFullYear()}</p>
   </footer>`;
 }
